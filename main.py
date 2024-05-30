@@ -2,15 +2,11 @@
 import functions as fn
 import pandas as pd
 import numpy as np
-import openpyxl 
 import matplotlib.pyplot as plt
-from plotnine import ggplot, aes, geom_line
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, f1_score, roc_curve, auc, RocCurveDisplay
-from sklearn.svm import SVC
-from sklearn.preprocessing import label_binarize
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
 
 
 
@@ -87,3 +83,51 @@ fn.otrossintomas(df_trainging)
 
 #est grafico se puede ver la cantidad de sintmoas de cada enfermedad/diagnostico
 fn.diagcomplejos(df_trainging,Enfermedades)
+
+
+#MODELO DE ML
+#MODELO RANDOM FOREST
+
+X_train = df_trainging.drop(columns=['prognosis'])
+Y_train = df_trainging['prognosis']
+
+X_test = df_test.drop(columns=['prognosis'])
+Y_test = df_test['prognosis']
+
+
+# Definir el modelo
+rf = RandomForestClassifier()
+
+# Definir el espacio de búsqueda de hiperparámetros
+param_grid = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+    'max_features': ['auto', 'sqrt', 'log2']
+}
+
+# Configurar la búsqueda en grid
+grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, n_jobs=-1, verbose=2)
+
+# Ejecutar la búsqueda
+grid_search.fit(X_train, Y_train)
+
+print(f"Mejores hiperparámetros: {grid_search.best_params_}")
+print(f"Mejor score de validación cruzada: {grid_search.best_score_}")
+
+best_rf = grid_search.best_estimator_
+best_rf.fit(X_train, Y_train)
+
+
+y_pred = best_rf.predict(X_test)
+
+
+# Evaluar el rendimiento
+accuracy = accuracy_score(Y_test, y_pred)
+conf_matrix = confusion_matrix(Y_test, y_pred)
+class_report = classification_report(Y_test, y_pred)
+
+print("Accuracy:", accuracy)
+print("Confusion Matrix:\n", conf_matrix)
+print("Classification Report:\n", class_report)
