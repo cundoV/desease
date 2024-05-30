@@ -1,4 +1,5 @@
-# imporacion de librerias 
+# IMPORTACION DE LIBRERIAS 
+import functions as fn
 import pandas as pd
 import numpy as np
 import openpyxl 
@@ -13,7 +14,8 @@ from sklearn.preprocessing import label_binarize
 
 
 
-#IMPRATCAION DE LOS DF
+
+#IMPORTACION DE LOS DF
 df_trainging= pd.read_csv("data/Training.csv")
 df_test = pd.read_csv("data/Testing.csv")
 
@@ -60,10 +62,28 @@ Sintomas = df_trainging.columns.difference(['prognosis']).values.tolist()
 filtro_train = df_trainging.loc[df_trainging['prognosis'] == 'Fungal infection']
 filtro_test = df_test.loc[df_test['prognosis'] == 'Fungal infection']
 
-filtro_train = df_trainging.loc[df_trainging['prognosis'] == 'Allergy']
-filtro_test = df_test.loc[df_test['prognosis'] == 'Allergy']
+filtro_train = df_trainging.loc[df_trainging['prognosis'] == 'Common Cold']
+filtro_test = df_test.loc[df_test['prognosis'] == 'Common Cold']
 
 # Eliminar las columnas con todos sus valores iguales a 0
 filtro_train.loc[:, (filtro_train != 0).any(axis=0)]
 filtro_test.loc[:, (filtro_test != 0).any(axis=0)]
 
+
+
+#este grafico me perimte enteder que hay un sesgo hacia la derecha, lo cual voy a tener valores muy lejos de la normal
+#gracias a este grafico voy a graficar los sitomas con frecuencia mayor de 50 apariciones en los 303 diagnosticos
+fn.gauss(df_trainging)
+
+#este grafico me muestra los porsetnajes de aparicion del determinado sintoma eleji 10 pq estaba en el rango del grafico de arriba
+fn.sintomasfrec(df_trainging)
+
+#con respecto a los otros sintomas, este grafico me permite observar la media mediana y la desviacion estandar de los porsentajes de los 
+#otros sintomas los cuales son muy pequenos  
+fn.otrossintomas(df_trainging)
+
+#mas o menos con estos graficos podemos decir cuales sintomas son mas frecuentes 
+# una aplicacion de esto seria que la intrefaz de usuario pregunte primero con estos sitomas 
+
+#est grafico se puede ver la cantidad de sintmoas de cada enfermedad/diagnostico
+fn.diagcomplejos(df_trainging,Enfermedades)
