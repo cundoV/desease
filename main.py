@@ -131,3 +131,7 @@ class_report = classification_report(Y_test, y_pred)
 print("Accuracy:", accuracy)
 print("Confusion Matrix:\n", conf_matrix)
 print("Classification Report:\n", class_report)
+
+#Con esta precisión del 97.62% y una matriz de confusión perfecta, parece que el modelo de clasificación es altamente efectivo en la identificación de diversas enfermedades. 
+# Sin embargo, vale la pena investigar más a fondo por qué la infección fúngica tiene un rendimiento ligeramente inferior. En general, los resultados indican una alta capacidad 
+# del modelo para clasificar una amplia gama de enfermedades con precisión y confianza.
